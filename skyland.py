@@ -255,21 +255,46 @@ def do_sign(cred_resp):
 
 
 def save(token):
-    with open(token_save_name, 'w') as f:
-        f.write(token)
+    # 检查是否是新格式（包含冒号）
+    if ':' in token:
+        # 如果是"电话:tk"格式，直接保存
+        line = token
+    else:
+        # 否则是纯tk格式
+        line = token
+    
+    # 追加写入文件
+    with open(token_save_name, 'a') as f:
+        f.write(line + '\n')
     print(
-        f'您的鹰角网络通行证保存在{token_save_name}, 打开这个可以把它复制到云函数服务器上执行!\n双击添加账号即可再次添加账号')
+        f'您的鹰角网络通行证已添加到{token_save_name}文件中，打开这个文件可以把它复制到云函数服务器上执行!')
 
 
 def read(path):
-    if not os.path.exists(token_save_name):
+    if not os.path.exists(path):
         return []
-    v = []
+    
+    tokens = []
     with open(path, 'r', encoding='utf-8') as f:
-        for i in f.readlines():
-            i = i.strip()
-            i and i not in v and v.append(i)
-    return v
+        for line in f:
+            # 去除行尾换行符
+            line = line.strip()
+            # 跳过空行
+            if not line:
+                continue
+            # 跳过注释行（以###开头）
+            if line.startswith('###'):
+                continue
+            # 处理"电话:tk"格式
+            if ':' in line:
+                # 分割电话号码和token
+                parts = line.split(':', 1)
+                if len(parts) == 2:
+                    tokens.append(parts[1].strip())
+            else:
+                # 纯token格式
+                tokens.append(line)
+    return tokens
 
 
 def read_from_env():
@@ -288,19 +313,24 @@ def init_token():
         print('使用环境变量里面的token')
         # 对于github action,不需要存储token,因为token在环境变量里
         return read_from_env()
-    tokens = []
-    tokens.extend(read(token_save_name))
+    
+    # 读取现有token（支持新格式）
+    tokens = read(token_save_name)
+    
     add_account = current_type == 'add_account'
     if add_account:
         print('！！！您启用了添加账号模式，将不会签到！！！')
+    
     if len(tokens) == 0 or add_account:
-        tokens.append(input_for_token())
-    save('\n'.join(tokens))
+        new_token = input_for_token()
+        save(new_token)
+        tokens.append(new_token)
+    
     return [] if add_account else tokens
 
 
 def input_for_token():
-    print("请输入你需要做什么：")
+    print("请选择登录方式：")
     print("1.使用用户名密码登录（非常推荐）")
     print("2.使用手机验证码登录（非常推荐，但可能因为人机验证失败）")
     print("3.手动输入鹰角网络通行证账号登录(推荐)")
@@ -317,11 +347,18 @@ def input_for_token():
 
 
 def start():
-    token = init_token()
+    tokens = init_token()
     success = True
-    for i in token:
+    for i in tokens:
         try:
-            success = do_sign(get_cred_by_token(i))
+            # 处理可能存在的冒号格式
+            if ':' in i:
+                # 如果是"电话:tk"格式，只取tk部分
+                token_value = i.split(':', 1)[1].strip()
+            else:
+                token_value = i
+                
+            success = do_sign(get_cred_by_token(token_value))
         except Exception as ex:
             print(f'签到失败，原因：{str(ex)}')
             logging.error('', exc_info=ex)
