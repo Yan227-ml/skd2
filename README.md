@@ -31,11 +31,13 @@
 
 ## 方法1
 
-1.先装python（3.6及以上）且安装requests库.cmd 运行`pip install requests`
+1.安装python（3.6版本及以上）。
 
-2.下载脚本`skyland.py`
+2.下载`requirements.txt` ，在该目录下打开命令提示符(CMD)，运行`pip install -r requirements.txt`
 
-3.双击本文件（弹出一个黑框框代表你成功了）
+2.下载脚本`skyland.py`、`SecuritySm.py`,这两个文件都要放置在`requirements.txt`文件同目录下
+
+3.命令提示符运行`python skyland.py`（结果输出如下就代表你成功了）
 ![img.png](assets/img_0.png)
 
 （以上3步可以用我打好的exe文件直接运行，链接见[release](https://gitee.com/FancyCabbage/skyland-auto-sign/releases)
@@ -158,7 +160,15 @@ TOKEN和日志应该都会被存储在MAA根路径下
 
 点击 New repository secret
 
-创建名为`TOKEN`的环境变量（注意变量名全大写），并填入你的鹰角网络通行证，如果要管理多个账号，换行即可
+
+ **创建名为`TOKEN`的环境变量（注意变量名全大写），并填入你的鹰角网络通行证，如果要管理多个账号，换行即可** 
+
+ **如果要开启 Server酱³ APP推送的话，就创建名为`SC3_SENDKEY`和`SC3_UID`(可选）的环境变量；如果是第一次使用 Server酱³ 的话，需要到 [Server酱3官网](https://sc3.ft07.com/) 注册一个账号，再在手机上下载Server酱³ App。**
+
+`SC3_SENDKEY`: Server酱³ SendKey（形如 sctp12345tXXXX...）
+
+`SC3_UID`（可选）: 若不填会从SC3_SENDKEY自动解析（形如 12345)
+
 
 如果是第一次使用GitHub Action的话，还需要手动打开这个功能 在你仓库上方菜单中进入Actions
 
@@ -172,7 +182,14 @@ TOKEN和日志应该都会被存储在MAA根路径下
 
 ## 使用NAS部署
 
-其实和Github Action的配置方式一样，导入脚本以后，创建一个`TOKEN`的环境变量即可。
+其实和Github Action的配置方式一样，导入脚本以后， **创建一个`TOKEN`的环境变量** 即可。
+
+ **如果要开启 Server酱³ APP推送的话，就创建名为`SC3_SENDKEY`和`SC3_UID`(可选）的环境变量。如果是第一次使用 Server酱³ 的话，需要到 [Server酱3官网](https://sc3.ft07.com/) 注册一个账号，再在手机上下载Server酱³ App。** 
+
+SC3_SENDKEY: Server酱³ SendKey（形如 sctp12345tXXXX...）。
+
+SC3_UID（可选）: 若不填会从SC3_SENDKEY自动解析。（形如 12345）。
+
 
 每个面板可能创建方式不太一样，不展示了
 
