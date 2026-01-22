@@ -10,7 +10,7 @@ import requests
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.ciphers.algorithms import AES
-from cryptography.hazmat.decrepit.ciphers.algorithms import TripleDES
+from cryptography.hazmat.primitives.ciphers.algorithms import TripleDES
 from cryptography.hazmat.primitives.ciphers.base import Cipher
 from cryptography.hazmat.primitives.ciphers.modes import CBC, ECB
 
