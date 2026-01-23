@@ -17,7 +17,7 @@ def push_pushplus(all_logs: list[str]):
     if not token:
         return
     title = f'森空岛自动签到结果 - {date.today().strftime("%Y-%m-%d")}'
-    topic = os.environ.get('TOPIC', '').strip()
+    topic = os.environ.get('PUSHPLUS_TOPIC', '').strip()
     desp = '\n'.join(all_logs) if all_logs else '今日无可用账号或无输出'
 
     api = f"https://www.pushplus.plus/send?token={token}"

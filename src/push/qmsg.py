@@ -14,8 +14,8 @@ def push_qmsg(all_logs: list[str]):
     #   QQ: 可选，指定要接收消息的QQ号或者QQ群。多个以英文逗号分割，例如：12345,12346。
     #   BOT： 可选，机器人的QQ号。
     token = os.environ.get('QMSG_TOKEN', '').strip()
-    qq = os.environ.get('QQ', '').strip()
-    bot = os.environ.get('BOT', '').strip()
+    qq = os.environ.get('QMSG_QQ', '').strip()
+    bot = os.environ.get('QMSG_BOT', '').strip()
     if not token:
         return
     
