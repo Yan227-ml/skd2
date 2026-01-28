@@ -335,17 +335,17 @@ export PUSHPLUS_TOKEN="your_token"
 export QMSG_TOKEN="your_token"
 
 # 或者在一行中设置
-SC3_SENDKEY="your_sendkey" PUSHPLUS_TOKEN="your_token" python your_script.py
+SC3_SENDKEY="your_sendkey" PUSHPLUS_TOKEN="your_token" python src/main.py
 
 # Windows (命令提示符)
 set SC3_SENDKEY=your_sendkey
 set PUSHPLUS_TOKEN=your_token
-python your_script.py
+python src/main.py.py
 
 # Windows (PowerShell)
 $env:SC3_SENDKEY="your_sendkey"
 $env:PUSHPLUS_TOKEN="your_token"
-python your_script.py
+python src/main.py
 ```
 
 #### 方式二：配置文件（适用于本地运行）
