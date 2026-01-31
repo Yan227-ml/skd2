@@ -20,7 +20,7 @@ def load_config_to_env():
                 value = config.get(section_name, option)
                 # 将配置项添加到环境变量中
                 env_key = option.upper()  # 转换为大写作为环境变量名
-                if value:  # 只有当值不为空时才设置环境变量
+                if value and env_key not in os.environ:  # 只有当值不为空且环境变量不存在时才设置
                     os.environ[env_key] = value
 
 # 加载配置到环境变量

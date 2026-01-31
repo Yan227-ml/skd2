@@ -23,13 +23,19 @@
 - [多账号支持](#multiple_account)
 - [多端登录问题](#multiple_login)
 - [有关新版本参数验证](#sign-headers)
+- [接收消息推送](#log_notify)
+	- [Serverchan³](#log_notify_serverchan)
+	- [PUSHPLUS（推送加）](#log_notify_pushplus)
+	- [Qmsg酱](#log_notify_qmsg)
 - [有关新版本获得Cred必传的dId参数](#dId)
 
 [视频用法]( https://www.bilibili.com/video/BV1DP411h7s6)
 
 <a name="mode1"></a>
 
-## 方法1
+## 在自己电脑上运行
+
+### 方法1-直接运行
 
 1.安装python（3.9版本及以上）。
 
@@ -60,7 +66,7 @@
 1.3版本在脚本路径下多了一个`添加账号.bat`,双击运行会再次出现登陆界面，按照步骤走可以再次添加一个账号
 <a name="maa"></a>
 
-### MAA支持
+#### 方法2-MAA支持
 
 可以使用MAA自动执行脚本
 
@@ -80,11 +86,11 @@ TOKEN和日志应该都会被存储在MAA根路径下
 
 <a name="mode2"></a>
 
-## 方法2
+## 在云函数上运行
 
 使用华为云挂载服务器签到（华为云有每月免费额度）
 
-在`cloud_functions`文件夹下的代码是华为云的适配好的代码。
+**在[release](https://gitee.com/FancyCabbage/skyland-auto-sign/releases)中已上传为华为云的适配好的代码。**
 
 1.首先注册登录华为云账号
 ![img_7.png](assets/img_7.png)
@@ -102,7 +108,7 @@ TOKEN和日志应该都会被存储在MAA根路径下
 6.进来后是这样的界面，点击右上角上传自zip文件（或者你在左边的编辑器里自己把文件一个个创建好复制粘贴进去也行）
 ![img_10.png](assets/img_10.png)
 
-7.上传
+7.将刚刚下载的压缩包上传
 ![img_11.png](assets/img_11.png)
 
 8.上传完成后应该是这个样子的
@@ -138,13 +144,13 @@ TOKEN和日志应该都会被存储在MAA根路径下
 
 <a name="mobile"></a>
 
-### 使用手机操作
+## 使用手机操作
 
 //TODO
 
 <a name="mode3"></a>
 
-## 方法3
+## 使用Github Actions托管
 
 使用Github Action自动运行脚本
 
@@ -154,25 +160,17 @@ TOKEN和日志应该都会被存储在MAA根路径下
 
 将本仓库的源代码全部下载下来，上传到github
 
-进入自己仓库的项目主页后，在上方的菜单中进入Settings > Secrets and variables > Actions
+进入自己仓库的项目主页后，在上方的菜单中进入`Settings` > `Secrets and variables` > `Actions`
 
-点击 New repository secret
-
+点击 `New repository secret`
 
  **创建名为`TOKEN`的环境变量（注意变量名全大写），并填入你的鹰角网络通行证，如果要管理多个账号，换行即可** 
 
- **如果要开启 Server酱³ APP推送的话，就创建名为`SC3_SENDKEY`和`SC3_UID`(可选）的环境变量；如果是第一次使用 Server酱³ 的话，需要到 [Server酱3官网](https://sc3.ft07.com/) 注册一个账号，再在手机上下载Server酱³ App。**
-
-`SC3_SENDKEY`: Server酱³ SendKey（形如 sctp12345tXXXX...）
-
-`SC3_UID`（可选）: 若不填会从SC3_SENDKEY自动解析（形如 12345)
-
-
-如果是第一次使用GitHub Action的话，还需要手动打开这个功能 在你仓库上方菜单中进入Actions
+如果是第一次使用GitHub Action的话，还需要手动打开这个功能 在你仓库上方菜单中进入`Actions`
 
 点击 I understand... enable them > Enable workflow
 
-之后就可以自动运行签到了, 想要手动测试的话，选择左侧的Auto Sign > Run workflow, 刷新页面就能看到结果了
+之后就可以自动运行签到了, 想要手动测试的话，选择左侧的`Auto Sign` > `Run workflow`, 刷新页面就能看到结果了
 
 现在可以在Github Action Variable中设置变量`EXIT_WHEN_FAIL = on`，当签到发生错误时，脚本会返回错误，进而你会收到来自Github的邮件，及时知道脚本运行情况
 
@@ -261,6 +259,162 @@ SC3_UID（可选）: 若不填会从SC3_SENDKEY自动解析。（形如 12345）
 'dId': 'de9759a5afaa634f',
 'platform': '1'
 ```
+
+<a name="log_notify"></a>
+
+## 接收消息推送
+
+目前脚本已接入多种消息推送服务，可以通过环境变量或配置文件进行配置。
+
+### 支持的推送服务
+
+<a name="log_notify_serverchan"></a>
+#### 1. Serverchan³ (Server酱³)
+
+Serverchan³ 是一种通过APP接收消息的推送服务。
+
+**配置方法：**
+```bash
+# 环境变量配置
+SC3_SENDKEY=your_sendkey_here
+SC3_UID=your_uid_here  # 可选，不填会自动从sendkey解析
+```
+
+**使用步骤：**
+1. 访问 [Server酱³官网](https://sc3.ft07.com/) 注册账号
+2. 在官网上获取 SendKey（形如 `sctp12345tXXXX...`）
+3. 在手机上下载 Server酱³ App 并登录
+4. 将 SendKey 设置为 `SC3_SENDKEY` 环境变量
+5. UID（形如 `12345`）可选，若不设置会自动从 SendKey 解析
+
+<a name="log_notify_pushplus"></a>
+#### 2. PUSHPLUS（推送加）
+
+PUSHPLUS 支持微信推送等多种方式。
+
+**配置方法：**
+```bash
+# 环境变量配置
+PUSHPLUS_TOKEN=your_token_here
+PUSHPLUS_TOPIC=your_topic_here  # 可选，指定推送群组
+```
+
+**使用步骤：**
+1. 访问 [PUSHPLUS官网](https://www.pushplus.plus/) 注册账号
+2. 登录后在"一对一推送"中获取 token
+3. 如果需要推送到群组，在"我的频道"创建频道获取 topic
+4. 将 token 设置为 `PUSHPLUS_TOKEN` 环境变量
+
+<a name="log_notify_qmsg"></a>
+#### 3. Qmsg酱
+
+Qmsg酱 支持QQ消息推送。
+
+**配置方法：**
+```bash
+# 环境变量配置
+QMSG_TOKEN=your_token_here
+QMSG_QQ=your_qq_number  # QQ号，多个用英文逗号分隔
+QMSG_BOT=bot_type  # 可选，指定机器人类型
+```
+
+**使用步骤：**
+1. 访问 [Qmsg酱官网](https://qmsg.zendee.cn/) 注册账号
+2. 在"个人中心"获取 token
+3. 添加需要接收消息的QQ号
+4. 将 token 和 QQ 号设置为对应的环境变量
+
+### 配置方式
+
+#### 方式一：环境变量（适用于云函数）
+直接在运行脚本前设置环境变量：
+```bash
+# Linux/Mac
+export SC3_SENDKEY="your_sendkey"
+export PUSHPLUS_TOKEN="your_token"
+export QMSG_TOKEN="your_token"
+
+# 或者在一行中设置
+SC3_SENDKEY="your_sendkey" PUSHPLUS_TOKEN="your_token" python src/main.py
+
+# Windows (命令提示符)
+set SC3_SENDKEY=your_sendkey
+set PUSHPLUS_TOKEN=your_token
+python src/main.py
+
+# Windows (PowerShell)
+$env:SC3_SENDKEY="your_sendkey"
+$env:PUSHPLUS_TOKEN="your_token"
+python src/main.py
+```
+
+#### 方式二：配置文件（适用于本地运行）
+修改`src/push`目录下的 `config.ini` 文件：
+
+```ini
+[PUSH_CONFIG]
+; Serverchan³ 配置
+SC3_SENDKEY=your_sendkey_here
+SC3_UID=your_uid_here
+
+; PUSHPLUS 配置
+PUSHPLUS_TOKEN=your_token_here
+PUSHPLUS_TOPIC=your_topic_here
+
+; Qmsg酱 配置
+QMSG_TOKEN=your_token_here
+QMSG_QQ=your_qq_number
+QMSG_BOT=bot_type
+```
+
+#### 方式三：.env 文件（适用于docker等虚拟环境）
+在项目根目录创建 `.env` 文件：
+```env
+SC3_SENDKEY=your_sendkey_here
+PUSHPLUS_TOKEN=your_token_here
+QMSG_TOKEN=your_token_here
+QMSG_QQ=your_qq_number
+```
+
+## 使用建议
+
+1. **多服务配置**：可以同时配置多个推送服务，脚本会尝试所有配置的服务
+2. **优先级**：
+   - 环境变量 > 配置文件
+   - 所有服务并行发送，任意一个成功即视为推送成功
+3. **安全提示**：
+   - 不要在公开场合泄露 token 或 sendkey
+   - 建议使用配置文件或环境变量，避免在代码中硬编码
+
+## 常见问题
+
+### Q：如何测试推送是否正常？
+A：可以手动运行脚本的测试函数或触发一次正常的运行流程。
+
+### Q：配置了多个推送服务，会重复收到消息吗？
+A：是的，每个配置的服务都会发送一次消息。
+
+### Q：如何关闭某个推送服务？
+A：删除或注释掉对应的环境变量或配置项即可。
+
+### Q：推送失败会有什么提示？
+A：脚本会记录推送失败的日志，可以在日志中查看具体原因。
+
+### Q：支持自定义推送内容格式吗？
+A：目前支持基础文本推送，高级格式请参考各服务的官方文档。欢迎所有志同道合的小伙伴一起参与本项目建设~
+
+## 环境变量参考表
+
+| 环境变量名 | 必填 | 说明 | 示例值 |
+|-----------|------|------|--------|
+| `SC3_SENDKEY` | 是 | Server酱³ SendKey | `sctp12345tXXXX...` |
+| `SC3_UID` | 否 | Server酱³ UID | `12345` |
+| `PUSHPLUS_TOKEN` | 是 | PUSHPLUS Token | `1234567890abcdef` |
+| `PUSHPLUS_TOPIC` | 否 | PUSHPLUS 群组ID | `topic123` |
+| `QMSG_TOKEN` | 是 | Qmsg酱 Token | `1234567890abcdef` |
+| `QMSG_QQ` | 是 | 接收消息的QQ号 | `123456789` |
+| `QMSG_BOT` | 否 | 机器人类型 | `qq` |
+---
 
 <a name="dId"></a>
 ## 有关新版本获得Cred必传的dId参数
