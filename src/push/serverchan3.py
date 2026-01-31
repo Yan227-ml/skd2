@@ -7,6 +7,23 @@ from typing import Tuple
 import requests
 
 
+def _format_serverchan_desp(all_logs: list[str]) -> str:
+    if not all_logs:
+        return '今日无可用账号或无输出'
+
+    lines: list[str] = []
+    for item in all_logs:
+        text = item.replace('\r\n', '\n')
+        parts = text.split('\n\n')
+        if not parts:
+            lines.append('')
+            continue
+        lines.extend(parts)
+
+    # Server酱 desp 使用 Markdown，单换行会折叠为一个空格，需要显式换行。
+    return '  \n'.join(line.rstrip() for line in lines)
+
+
 def push_serverchan3(all_logs: list[str]):
     # === Server酱³ 推送（可选，通过环境变量控制） ===
     # 在本地或 GitHub Actions 设置：
@@ -18,7 +35,7 @@ def push_serverchan3(all_logs: list[str]):
     uid = os.environ.get('SC3_UID', '').strip() or None
     title = f'森空岛自动签到结果 - {date.today().strftime("%Y-%m-%d")}'
 
-    desp = '\n'.join(all_logs) if all_logs else '今日无可用账号或无输出'
+    desp = _format_serverchan_desp(all_logs)
 
     if uid is None:
         m = re.match(r"^sctp(\d+)t", sendkey)
