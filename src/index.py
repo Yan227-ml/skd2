@@ -1,7 +1,9 @@
 import logging
+import queue
 import threading
 
 import skyland
+import push
 
 # 华为云本地文件在./code下面
 file_save_token = './code/INPUT_HYPERGRYPH_TOKEN.txt'
@@ -21,17 +23,29 @@ def read(path):
 def handler():
     token = read(file_save_token)
     if token:
-        for i in range(1, len(token)):
-            threading.Thread(target=start, args=(token[i],)).start()
-        start(token[0])
+        all_logs = []
+        result_queue = queue.Queue()
+        threads = []
+        for i in range(0, len(token)):
+            t = threading.Thread(target=start, args=(token[i], result_queue))
+            threads.append(t)
+            t.start()
+        for t in threads:
+            t.join()
+        while not result_queue.empty():
+            all_logs.extend(result_queue.get())
+        push.push(all_logs)
 
 
-def start(token):
+def start(token, result_queue):
     try:
         cred = skyland.get_cred_by_token(token)
-        skyland.do_sign(cred)
+        success, logs_out = skyland.do_sign(cred)
+        result_queue.put(logs_out)
     except Exception as ex:
-        logging.error('签到完全失败了！：', exc_info=ex)
+        err = f'签到失败，原因：{str(ex)}'
+        logging.error(err, exc_info=ex)
+        result_queue.put([err])
 
 
 handler()
