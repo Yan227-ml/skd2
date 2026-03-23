@@ -3,6 +3,7 @@ import hmac
 import json
 import logging
 import os.path
+import random
 import threading
 import time
 from getpass import getpass
@@ -271,6 +272,8 @@ def do_sign(cred_resp):
         elif app_code == 'endfield':
             msg = sign_for_endfield(i)
         logging.info(msg)
+        if len(characters) > 1:
+            time.sleep(random.uniform(2, 3))
 
         logs_out.extend(msg)
 
