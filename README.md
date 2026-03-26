@@ -161,11 +161,9 @@ TOKEN和日志应该都会被存储在MAA根路径下
 
  **创建名为`TOKEN`的环境变量（注意变量名全大写），并填入你的鹰角网络通行证，如果要管理多个账号，换行即可** 
 
- **如果要开启 Server酱³ APP推送的话，就创建名为`SC3_SENDKEY`和`SC3_UID`(可选）的环境变量；如果是第一次使用 Server酱³ 的话，需要到 [Server酱3官网](https://sc3.ft07.com/) 注册一个账号，再在手机上下载Server酱³ App。**
+ **如果要开启 Server酱³ APP 推送的话，就创建名为 `SC3_SENDKEY` 的环境变量；如果是第一次使用 Server酱³ 的话，需要到 [Server酱³ 官网](https://sc3.ft07.com/) 注册一个账号，再在手机上下载 Server酱³ App。**
 
 `SC3_SENDKEY`: Server酱³ SendKey（形如 sctp12345tXXXX...）
-
-`SC3_UID`（可选）: 若不填会从SC3_SENDKEY自动解析（形如 12345)
 
 
 如果是第一次使用GitHub Action的话，还需要手动打开这个功能 在你仓库上方菜单中进入Actions
@@ -182,11 +180,9 @@ TOKEN和日志应该都会被存储在MAA根路径下
 
 其实和Github Action的配置方式一样，导入脚本以后， **创建一个`TOKEN`的环境变量** 即可。
 
- **如果要开启 Server酱³ APP推送的话，就创建名为`SC3_SENDKEY`和`SC3_UID`(可选）的环境变量。如果是第一次使用 Server酱³ 的话，需要到 [Server酱3官网](https://sc3.ft07.com/) 注册一个账号，再在手机上下载Server酱³ App。** 
+ **如果要开启 Server酱³ APP 推送的话，就创建名为 `SC3_SENDKEY` 的环境变量。如果是第一次使用 Server酱³ 的话，需要到 [Server酱³ 官网](https://sc3.ft07.com/) 注册一个账号，再在手机上下载 Server酱³ App。** 
 
-SC3_SENDKEY: Server酱³ SendKey（形如 sctp12345tXXXX...）。
-
-SC3_UID（可选）: 若不填会从SC3_SENDKEY自动解析。（形如 12345）。
+`SC3_SENDKEY`: Server酱³ SendKey（形如 sctp12345tXXXX...）。
 
 
 每个面板可能创建方式不太一样，不展示了
