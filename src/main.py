@@ -14,11 +14,20 @@ use_proxy = os.environ.get('USE_PROXY')
 
 def config_logger():
     current_date = date.today().strftime('%Y-%m-%d')
-    if not os.path.exists('logs'):
-        os.mkdir('logs')
+
+
+    file_path = "./logs"
+    try:
+        if not os.path.exists(file_path):
+            os.makedirs(file_path,exist_ok=True)
+    except PermissionError:
+        file_path = os.path.join(os.getenv('LOCALAPPDATA'), "skyland-auto-sign\\logs")
+        if not os.path.exists(file_path):
+            os.makedirs(file_path,exist_ok=True)
+
     logger = logging.getLogger()
 
-    file_handler = logging.FileHandler(f'./logs/{current_date}.log', encoding='utf-8')
+    file_handler = logging.FileHandler(f'{file_path}/{current_date}.log', encoding='utf-8')
     logger.addHandler(file_handler)
     logger.setLevel(logging.DEBUG)
     file_handler.setLevel(logging.INFO)

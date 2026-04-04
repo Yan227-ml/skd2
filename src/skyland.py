@@ -3,6 +3,7 @@ import hmac
 import json
 import logging
 import os.path
+import tempfile
 import threading
 import time
 from getpass import getpass
@@ -12,7 +13,14 @@ import requests
 
 from SecuritySm import get_d_id
 
-token_save_name = 'TOKEN.txt'
+token_save_name = "TOKEN.txt"
+
+try:
+    with open(token_save_name,'w') as f:
+        pass
+except PermissionError as e:
+    token_save_name = os.path.join(os.getenv('LOCALAPPDATA'), 'skyland-auto-sign\\TOKEN.txt')
+
 app_code = '4ca99fa6b56cc2ba'
 token_env = os.environ.get('TOKEN')
 # 现在想做什么？
